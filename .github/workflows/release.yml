@@ -15,14 +15,17 @@ jobs:
       image: rust:latest
 
     env:
-      APP_NAME: sing-box-api
+      APP_NAME: sing-box-config-api
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Build release binary
-        run: cargo build --release
+        run: cargo build --release --bin ${APP_NAME}
+
+      - name: Debug build output
+        run: ls -la target/release
 
       - name: Prepare package directory
         run: |
@@ -40,12 +43,6 @@ jobs:
         run: |
           cd dist
           tar -czf ${APP_NAME}-${GITHUB_REF_NAME}-linux-x86_64.tar.gz ${APP_NAME}
-
-      - name: Upload workflow artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.APP_NAME }}-${{ github.ref_name }}-linux-x86_64
-          path: dist/${{ env.APP_NAME }}-${{ github.ref_name }}-linux-x86_64.tar.gz
 
       - name: Create GitHub release and upload archive
         env:

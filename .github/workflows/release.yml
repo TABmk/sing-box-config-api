@@ -24,9 +24,6 @@ jobs:
       - name: Build release binary
         run: cargo build --release --bin ${APP_NAME}
 
-      - name: Debug build output
-        run: ls -la target/release
-
       - name: Prepare package directory
         run: |
           mkdir -p dist/${APP_NAME}
@@ -67,4 +64,5 @@ jobs:
         run: |
           gh release create "${GITHUB_REF_NAME}" \
             "dist/${APP_NAME}-${GITHUB_REF_NAME}-linux-x86_64.tar.gz" \
+            --repo "${GITHUB_REPOSITORY}" \
             --generate-notes

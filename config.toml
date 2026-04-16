@@ -1,0 +1,8 @@
+secret = "replace-with-strong-secret"
+listen_addr = "0.0.0.0:17118"
+sing_box_config_path = "/etc/sing-box/config.json"
+backups_dir = "/etc/sing-box/backups"
+srs_dir = "/etc/sing-box/srs"
+status_command = "sudo -n /usr/local/libexec/sing-box-config-api/status"
+check_command = "sudo -n /usr/local/libexec/sing-box-config-api/check {config_path}"
+restart_command = "sudo -n /usr/local/libexec/sing-box-config-api/restart"

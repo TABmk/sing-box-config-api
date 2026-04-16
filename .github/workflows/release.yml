@@ -8,14 +8,14 @@ on:
 permissions:
   contents: write
 
+env:
+  APP_NAME: sing-box-config-api
+
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     container:
       image: rust:latest
-
-    env:
-      APP_NAME: sing-box-config-api
 
     steps:
       - name: Checkout repository
@@ -44,7 +44,24 @@ jobs:
           cd dist
           tar -czf ${APP_NAME}-${GITHUB_REF_NAME}-linux-x86_64.tar.gz ${APP_NAME}
 
-      - name: Create GitHub release and upload archive
+      - name: Upload packaged archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-archive
+          path: dist/${{ env.APP_NAME }}-${{ github.ref_name }}-linux-x86_64.tar.gz
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Download packaged archive
+        uses: actions/download-artifact@v4
+        with:
+          name: release-archive
+          path: dist
+
+      - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
